@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="#">
-    <img src="./public/logo123.svg" alt="Logo" width="80" height="80">
+    <img src="./public/favicon.ico" alt="Logo" width="80" height="80">
   </a>
 
   <h2 align="center">Book-Ku</h2>
