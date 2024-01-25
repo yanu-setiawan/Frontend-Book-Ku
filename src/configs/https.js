@@ -70,8 +70,56 @@ export const createBook = (fileImage, body) => {
     },
   });
 };
+export const updateBook = (fileImage, body) => {
+  const url = `${API_URL}/book/${body.id}`;
+
+  const formData = new FormData();
+
+  if (fileImage) {
+    formData.append("image_url", fileImage);
+  }
+
+  Object.entries(body).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+
+  console.log("formm", formData, fileImage, body);
+
+  return axios.patch(url, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
 
 export const deleteBook = (id) => {
   const url = `${API_URL}/book/${id}`;
   return axios.delete(url);
+};
+export const deleteCategory = (id) => {
+  const url = `${API_URL}/categories/${id}`;
+  return axios.delete(url);
+};
+
+export const getDetailBook = (id) => {
+  const url = `${API_URL}/book/${id}`;
+  return axios.get(url);
+};
+export const getDetailCtg = (id) => {
+  const url = `${API_URL}/categories/${id}`;
+  return axios.get(url);
+};
+export const editCategories = (body) => {
+  const url = `${API_URL}/categories/${body.id}`;
+  return axios.patch(url);
+};
+
+export const createCtg = (body) => {
+  const url = `${API_URL}/categories/create-ctg`;
+  console.log(url);
+  return axios({
+    method: "post",
+    url,
+    data: body,
+  });
 };

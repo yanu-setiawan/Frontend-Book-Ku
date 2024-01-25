@@ -2,13 +2,32 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 import { FaArrowRight, FaBook } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 function Header() {
   const navigate = useNavigate();
   const { isLoggedIn, logout } = useAuth();
   const handleLogout = () => {
-    logout();
-    navigate("/");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You are about to log out.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#14B8A6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log out!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout();
+        Swal.fire({
+          title: "Logged Out!",
+          text: "You have been successfully logged out.",
+          icon: "success",
+        }).then(() => {
+          navigate("/");
+        });
+      }
+    });
   };
 
   return (

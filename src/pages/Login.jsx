@@ -9,6 +9,7 @@ function Login() {
   const { isLoggedIn, login } = useAuth();
   const [valueEmail, setValueEmail] = useState("");
   const [valuePwd, setValuePwd] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -29,6 +30,7 @@ function Login() {
   console.log();
   const handleLogin = async () => {
     try {
+      setIsLoading(true);
       const result = await userLogin(valueEmail, valuePwd);
       if (result.status === 200) {
         login();
@@ -37,6 +39,8 @@ function Login() {
       console.log(result.status);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -70,7 +74,11 @@ function Login() {
               className="w-full my-5 py-2 bg-teal-500 shadow-md shadow-teal-500/50 hover:shadow-teal-500/40 text-white font-semibold rounded-lg"
               onClick={handleLogin}
             >
-              Login
+              {isLoading ? (
+                <div className=" loading loading-dots text-white text-lg"></div>
+              ) : (
+                "Login"
+              )}
             </button>
           </div>
         </div>

@@ -3,10 +3,12 @@ import { userRegister } from "../configs/https";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
+import Swal from "sweetalert2";
 
 function Register() {
   const [valueEmail, setValueEmail] = useState("");
   const [valuePwd, setValuePwd] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
 
@@ -26,14 +28,22 @@ function Register() {
   console.log();
   const handleRegister = async () => {
     try {
+      setLoading(true);
       const result = await userRegister(valueEmail, valuePwd);
       if (result.status === 201) {
-        console.log("register berhasil silahkan login");
+        Swal.fire({
+          icon: "success",
+          title: "Register Success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         navigate("/login");
       }
       console.log(result.status);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -69,7 +79,11 @@ function Register() {
               className="w-full my-5 py-2 bg-teal-500 shadow-md shadow-teal-500/50 hover:shadow-teal-500/40 text-white font-semibold rounded-lg"
               onClick={handleRegister}
             >
-              Register
+              {loading ? (
+                <div className=" loading loading-dots text-white text-lg"></div>
+              ) : (
+                "Register"
+              )}
             </button>
           </div>
         </div>

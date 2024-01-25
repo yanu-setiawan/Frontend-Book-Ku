@@ -3,29 +3,50 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import {
   deleteBook,
+  deleteCategory,
   getAllBook,
   getBookByCtg,
   getCategories,
 } from "../configs/https";
 import { FaSearch, FaTrash, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { useAuth } from "../utils/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import Footer from "../components/Footer";
+import ModalAddCtg from "../components/ModalAddCtg";
+import ModalEditCtg from "../components/ModalEditCtg";
 
 const Home = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [activeCategory, setActiveCategory] = useState(null);
   const [loading, setIsLoading] = useState(false);
   const [valSearch, setValSearch] = useState("");
-  const [valSort, setValSort] = useState("");
+  const [valSort, setValSort] = useState("asc");
   const [valMin, setValMin] = useState(0);
   const [valMax, setValMax] = useState(1000);
   const [minYear, setMinYear] = useState(1888);
   const [maxYear, setMaxYear] = useState(2025);
   const [dataCtg, setdataCtg] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
+  const [dataEditCtg, setDataEditCtg] = useState("");
 
   const { isLoggedIn } = useAuth();
+
+  const handleModalAdd = () => {
+    setModal(true);
+  };
+
+  const handleModalEdit = (params) => {
+    setModalEdit(true);
+    setDataEditCtg(params);
+  };
+
+  const succesAddCtg = () => {
+    setModal(false);
+    getCategory();
+  };
 
   const onChangeSearch = (e) => {
     setValSearch(e.target.value);
@@ -37,24 +58,19 @@ const Home = () => {
 
   const onChangeSort = (e) => {
     setValSort(e.target.value);
-    // console.log(e.target.value);
   };
 
   const onChangeMinPage = (e) => {
     setValMin(e.target.value);
-    // console.log(e.target.value);
   };
   const onChangeMaxPage = (e) => {
     setValMax(e.target.value);
-    // console.log(e.target.value);
   };
   const onChangeMinYear = (e) => {
     setMinYear(e.target.value);
-    // console.log(e.target.value);
   };
   const onChangeMaxYear = (e) => {
     setMaxYear(e.target.value);
-    // console.log(e.target.value);
   };
 
   const getCategory = async () => {
@@ -68,11 +84,12 @@ const Home = () => {
   };
 
   const handleGetByCtg = async (params) => {
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       const result = await getBookByCtg(params);
       console.log(result.data);
       setData(result.data.data);
+      setActiveCategory(params);
     } catch (error) {
       console.log(error);
     } finally {
@@ -101,7 +118,7 @@ const Home = () => {
       setIsLoading(true);
       const result = await getAllBook(body);
       setData(result.data.data);
-      console.log(data);
+      //   console.log(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -146,15 +163,56 @@ const Home = () => {
     }
   };
 
+  const handleDeleteCtg = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#14B8A6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (result.isConfirmed) {
+        await deleteCategory(id);
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your category has been deleted.",
+          icon: "success",
+        });
+
+        getCategory();
+      }
+    } catch (error) {
+      console.error("Error deleting:", error);
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to delete the file.",
+        icon: "error",
+      });
+    }
+  };
+
   useEffect(() => {
     fetch();
     getCategory();
   }, [valSearch, valSort, valMin, valMax, minYear, maxYear]);
   return (
     <>
+      {modal && <ModalAddCtg modal={modal} setModal={succesAddCtg} />}
+      {/* {modalEdit && (
+        <ModalEditCtg
+          modal={modalEdit}
+          data={dataEditCtg}
+          setModal={succesAddCtg}
+        />
+      )} */}
+
       <Header />
       <main className=" flex h-full w-full flex-col px-[10%] pb-16">
-        <div></div>
         <section className=" flex gap-4 mt-8">
           <div className="relative">
             <FaSearch
@@ -213,7 +271,7 @@ const Home = () => {
           <div className=" flex gap-4 ml-auto mt-12">
             <button
               className=" btn btn-success text-white font-bold "
-              onClick={() => handleNavigate("/create-book")}
+              onClick={() => handleModalAdd()}
             >
               New Categories <FaPlus />
             </button>
@@ -227,14 +285,34 @@ const Home = () => {
         )}
         <section
           className={`w-full flex gap-3  items-center ${
-            isLoggedIn ? "mt-2" : "mt-16"
+            isLoggedIn ? "mt-8" : "mt-16"
           }`}
         >
           {dataCtg.length > 0 &&
             dataCtg.map((item, index) => (
-              <div className="flex gap-5" key={index}>
+              <div className="flex gap-5 relative" key={index}>
+                {isLoggedIn && (
+                  <>
+                    {/* <button
+                      className=" btn-error btn btn-xs absolute top-[-13px] right-[32px] text-white font-semibold  "
+                      onClick={() => handleDeleteCtg(item.id)}
+                    >
+                      <FaTrash size={12} />
+                    </button> */}
+                    <button
+                      className=" btn-success btn btn-xs absolute top-[-13px] right-0 text-white font-semibold  "
+                      onClick={() => handleModalEdit(item.name)}
+                    >
+                      <FaPencilAlt size={12} />
+                    </button>
+                  </>
+                )}
                 <button
-                  className=" btn btn-outline btn-success hover:!text-white btn-sm h-[35px] w-28"
+                  className={`btn  btn-sm h-[35px] w-28 ${
+                    activeCategory === item.id
+                      ? "btn-success !text-white"
+                      : "btn-outline btn-success hover:!text-white"
+                  }`}
                   onClick={() => handleGetByCtg(item.id)}
                 >
                   <p className="">{item.name}</p>
@@ -242,10 +320,14 @@ const Home = () => {
               </div>
             ))}
         </section>
-        <div className=" w-full my-5 flex justify-center items-center">
+        <div
+          className={` w-full my-5 flex justify-center items-center ${
+            loading ? "h-[500px]" : "h-full"
+          }`}
+        >
           {loading ? (
             <div className=" flex justify-center items-center h-full absolute top-16">
-              <div className="w-14 loading h-full text-teal-500"></div>
+              <div className="w-14 loading h-full text-teal-500 "></div>
             </div>
           ) : (
             <section className=" w-full grid grid-cols-5 gap-x-7 gap-y-12  mt-6">
@@ -263,17 +345,29 @@ const Home = () => {
                         >
                           <FaTrash />
                         </button>
-                        <button className=" btn btn-success absolute top-0 right-0 text-white font-semibold text-sm">
-                          Edit Book <FaPencilAlt />
+                        <button
+                          className=" btn btn-success absolute top-0 right-0 text-white font-semibold text-sm "
+                          onClick={() =>
+                            handleNavigate(`/edit-book/${item.id}`)
+                          }
+                        >
+                          Edit
+                          <FaPencilAlt />
                         </button>
                       </>
                     )}
 
-                    <div className="border rounded-l-sm rounded-r-xl overflow-hidden w-full h-80">
+                    <div
+                      className={`border rounded-l-sm rounded-r-[15px] overflow-hidden w-full h-80 ${
+                        !isLoggedIn
+                          ? "transition duration-150 hover:scale-[1.06] hover:ease-in-out"
+                          : ""
+                      } `}
+                    >
                       <img
                         src={item.image}
                         alt=""
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover "
                       />
                     </div>
                     <p className=" font-bold mt-2 text-base font-book">

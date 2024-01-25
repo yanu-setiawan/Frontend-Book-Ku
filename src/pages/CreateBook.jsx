@@ -5,6 +5,7 @@ import { createBook, getCategories } from "../configs/https";
 import { FaPlus } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 const CreateBook = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const CreateBook = () => {
     title: "",
     total_page: "",
     price: "",
-    release_page: "",
+    release_year: "",
     description: "",
   });
 
@@ -67,7 +68,7 @@ const CreateBook = () => {
   return (
     <>
       <Header />
-      <main className=" px-[10%] mt-10">
+      <main className=" px-[10%] mt-10 pb-32">
         <h1 className=" text-4xl font-bold font-mulish my-6">Create Book</h1>
         <section className=" w-full flex flex-col gap-4">
           <div className="flex gap-5">
@@ -108,7 +109,7 @@ const CreateBook = () => {
                   type="text"
                   className="input bg-[#EFF3F5] px-4 w-full"
                   placeholder="Input Total Page"
-                  value={form.totalPage}
+                  value={form.total_page}
                   onChange={onChangeForm}
                 />
               </div>
@@ -169,6 +170,7 @@ const CreateBook = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 };
