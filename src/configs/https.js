@@ -109,9 +109,9 @@ export const getDetailCtg = (id) => {
   const url = `${API_URL}/categories/${id}`;
   return axios.get(url);
 };
-export const editCategories = (body) => {
-  const url = `${API_URL}/categories/${body.id}`;
-  return axios.patch(url);
+export const editCategories = (body, id) => {
+  const url = `${API_URL}/categories/${id}`;
+  return axios.patch(url, { name: body });
 };
 
 export const createCtg = (body) => {

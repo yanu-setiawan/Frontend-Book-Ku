@@ -19,6 +19,7 @@ import ModalEditCtg from "../components/ModalEditCtg";
 const Home = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [defaultData, setDefaultData] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
   const [loading, setIsLoading] = useState(false);
   const [valSearch, setValSearch] = useState("");
@@ -42,6 +43,8 @@ const Home = () => {
     setModalEdit(true);
     setDataEditCtg(params);
   };
+
+  //   console.log(dataEditCtg);
 
   const succesAddCtg = () => {
     setModal(false);
@@ -84,6 +87,10 @@ const Home = () => {
   };
 
   const handleGetByCtg = async (params) => {
+    if (params === 0) {
+      setActiveCategory(params);
+      return setData(defaultData);
+    }
     try {
       setIsLoading(true);
       const result = await getBookByCtg(params);
@@ -118,6 +125,7 @@ const Home = () => {
       setIsLoading(true);
       const result = await getAllBook(body);
       setData(result.data.data);
+      setDefaultData(result.data.data);
       //   console.log(data);
     } catch (error) {
       console.log(error);
@@ -163,39 +171,6 @@ const Home = () => {
     }
   };
 
-  const handleDeleteCtg = async (id) => {
-    try {
-      const result = await Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#14B8A6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      });
-
-      if (result.isConfirmed) {
-        await deleteCategory(id);
-
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your category has been deleted.",
-          icon: "success",
-        });
-
-        getCategory();
-      }
-    } catch (error) {
-      console.error("Error deleting:", error);
-      Swal.fire({
-        title: "Error!",
-        text: "Failed to delete the file.",
-        icon: "error",
-      });
-    }
-  };
-
   useEffect(() => {
     fetch();
     getCategory();
@@ -203,13 +178,6 @@ const Home = () => {
   return (
     <>
       {modal && <ModalAddCtg modal={modal} setModal={succesAddCtg} />}
-      {/* {modalEdit && (
-        <ModalEditCtg
-          modal={modalEdit}
-          data={dataEditCtg}
-          setModal={succesAddCtg}
-        />
-      )} */}
 
       <Header />
       <main className=" flex h-full w-full flex-col px-[10%] pb-16">
@@ -288,36 +256,21 @@ const Home = () => {
             isLoggedIn ? "mt-8" : "mt-16"
           }`}
         >
+          <CategoryComponent
+            activeCategory={activeCategory}
+            item={{ name: "All", id: 0 }}
+            handleGetByCtg={handleGetByCtg}
+            updateCtg={getCategory}
+          />
           {dataCtg.length > 0 &&
             dataCtg.map((item, index) => (
-              <div className="flex gap-5 relative" key={index}>
-                {isLoggedIn && (
-                  <>
-                    {/* <button
-                      className=" btn-error btn btn-xs absolute top-[-13px] right-[32px] text-white font-semibold  "
-                      onClick={() => handleDeleteCtg(item.id)}
-                    >
-                      <FaTrash size={12} />
-                    </button> */}
-                    <button
-                      className=" btn-success btn btn-xs absolute top-[-13px] right-0 text-white font-semibold  "
-                      onClick={() => handleModalEdit(item.name)}
-                    >
-                      <FaPencilAlt size={12} />
-                    </button>
-                  </>
-                )}
-                <button
-                  className={`btn  btn-sm h-[35px] w-28 ${
-                    activeCategory === item.id
-                      ? "btn-success !text-white"
-                      : "btn-outline btn-success hover:!text-white"
-                  }`}
-                  onClick={() => handleGetByCtg(item.id)}
-                >
-                  <p className="">{item.name}</p>
-                </button>
-              </div>
+              <CategoryComponent
+                key={index}
+                activeCategory={activeCategory}
+                item={item}
+                handleGetByCtg={handleGetByCtg}
+                updateCtg={getCategory}
+              />
             ))}
         </section>
         <div
@@ -402,5 +355,53 @@ const Home = () => {
     </>
   );
 };
+
+function CategoryComponent({
+  item,
+  handleGetByCtg,
+  updateCtg,
+  activeCategory,
+}) {
+  const [isModalCtg, setModalCtg] = useState(false);
+  const successEditCtg = () => {
+    setModalCtg(false);
+    updateCtg();
+  };
+
+  const { isLoggedIn } = useAuth();
+
+  return (
+    <>
+      <ModalEditCtg
+        modal={isModalCtg}
+        dataEditCtg={item.name}
+        setModal={successEditCtg}
+        id={item.id}
+      />
+      <div className="flex gap-5 relative">
+        {isLoggedIn && item.id != 0 && (
+          <>
+            <button
+              className=" btn-success btn btn-xs absolute top-[-13px] right-0 text-white font-semibold  "
+              onClick={() => setModalCtg(true)}
+            >
+              <FaPencilAlt size={12} />
+            </button>
+          </>
+        )}
+        <button
+          className={`btn  btn-sm h-[35px] w-28 ${
+            activeCategory === item.id
+              ? "btn-success !text-white"
+              : "btn-outline btn-success hover:!text-white"
+          }`}
+          onClick={() => handleGetByCtg(item.id)}
+        >
+          <p className="">{item.name}</p>
+        </button>
+      </div>
+    </>
+  );
+}
 
 export default Home;
