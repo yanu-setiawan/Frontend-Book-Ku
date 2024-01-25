@@ -69,7 +69,9 @@ const CreateBook = () => {
     <>
       <Header />
       <main className=" px-[10%] mt-10 pb-32">
-        <h1 className=" text-4xl font-bold font-mulish my-6">Create Book</h1>
+        <h1 className=" text-4xl font-bold font-mulish my-6 text-teal-500">
+          Create Book
+        </h1>
         <section className=" w-full flex flex-col gap-4">
           <div className="flex gap-5">
             <div className=" flex h-full border px-9 py-7 rounded-lg">

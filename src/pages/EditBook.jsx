@@ -96,7 +96,9 @@ const EditBook = () => {
     <>
       <Header />
       <main className=" px-[10%] mt-10 pb-32">
-        <h1 className=" text-4xl font-bold font-mulish my-6">Edit Book</h1>
+        <h1 className=" text-4xl font-bold font-mulish my-6 text-teal-500">
+          Edit Book
+        </h1>
         {isLoading ? (
           <div className=" loading w-8 flex justify-center items-center mx-auto my-auto text-teal-500"></div>
         ) : (

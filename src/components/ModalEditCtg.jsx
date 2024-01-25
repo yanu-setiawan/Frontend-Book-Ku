@@ -90,7 +90,7 @@ const ModalEditCtg = ({ modal, setModal, dataEditCtg, id }) => {
                 <div>
                   <label
                     htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-yellow"
+                    className="block mb-2 text-sm font-medium text-success"
                   >
                     Edit categories
                   </label>
@@ -116,7 +116,7 @@ const ModalEditCtg = ({ modal, setModal, dataEditCtg, id }) => {
                   )}
                 </button>
                 <button
-                  className="btn bg-teal-500 hover:bg-teal-500 text-white font-bold text-lg w-full"
+                  className="btn btn-success text-white font-bold text-lg w-full"
                   onClick={handleSubmit}
                 >
                   {isLoading ? (

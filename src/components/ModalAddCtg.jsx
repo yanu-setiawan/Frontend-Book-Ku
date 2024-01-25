@@ -59,7 +59,7 @@ const ModalAddCtg = ({ modal, setModal }) => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-yellow"
+                  className="block mb-2 text-sm font-medium text-success"
                 >
                   New categories
                 </label>
@@ -74,7 +74,7 @@ const ModalAddCtg = ({ modal, setModal }) => {
               </div>
               <div className="flex items-start"></div>
               <button
-                className="btn bg-teal-500 hover:bg-teal-500 text-white font-bold text-lg w-full"
+                className="btn btn-success text-white font-bold text-lg w-full"
                 onClick={handleSubmit}
               >
                 {isLoading ? (

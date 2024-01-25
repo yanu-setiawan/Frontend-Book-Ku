@@ -373,7 +373,7 @@ function CategoryComponent({
         {isLoggedIn && item.id != 0 && (
           <>
             <button
-              className=" btn-success btn btn-xs absolute top-[-13px] right-0 text-white font-semibold  "
+              className=" btn-success btn btn-xs absolute top-[-13px] right-0 text-white font-semibold border-2 border-white"
               onClick={() => setModalCtg(true)}
             >
               <FaPencilAlt size={12} />
