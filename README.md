@@ -32,7 +32,7 @@
 
 <!-- ![Product Name Screen Shot][product-screenshot] -->
 
-A Book-Ku app streamlines the ordering process, allowing customers to order and pay online for pickup or delivery. Users can browse menus, view hours and locations, and leave reviews. For Book-Kus, features like real-time sales reporting and inventory management help boost efficiency and growth.
+Book-Ku, an enchanting online library, presents an abundant collection of books from various genres. Enjoy the ease of exploring and discovering boundless, imaginative stories. With user-friendly ordering services and in-depth reviews, Book-Ku becomes a loyal companion for book enthusiasts who wish to explore the world of literature from the comfort of their screens. Let's celebrate the beauty of words together at Book-Ku, where each page opens the door to a captivating new world.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
