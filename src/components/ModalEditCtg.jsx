@@ -1,14 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { createCtg, deleteCategory, editCategories } from "../configs/https";
+import { deleteCategory, editCategories } from "../configs/https";
 import Swal from "sweetalert2";
-import { useParams } from "react-router-dom";
 
 const ModalEditCtg = ({ modal, setModal, dataEditCtg, id }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingD, setIsLoadingD] = useState(false);
   const [form, setForm] = useState("");
-  const [dataCtg, setDataCtg] = useState([]);
-  const params = useParams();
 
   const handleForm = (event) => {
     setForm(event.target.value);
@@ -67,7 +65,6 @@ const ModalEditCtg = ({ modal, setModal, dataEditCtg, id }) => {
   useEffect(() => {
     setForm(dataEditCtg);
   }, [modal]);
-  //   console.log(dataEditCtg);
   return (
     modal && (
       <section className=" w-full h-full bg-black  bg-opacity-60 inset-0  fixed z-50 ">

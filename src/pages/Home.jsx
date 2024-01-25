@@ -1,16 +1,16 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import {
   deleteBook,
-  deleteCategory,
   getAllBook,
   getBookByCtg,
   getCategories,
 } from "../configs/https";
 import { FaSearch, FaTrash, FaPencilAlt, FaPlus } from "react-icons/fa";
 import { useAuth } from "../utils/AuthContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Footer from "../components/Footer";
 import ModalAddCtg from "../components/ModalAddCtg";
@@ -30,21 +30,12 @@ const Home = () => {
   const [maxYear, setMaxYear] = useState(2025);
   const [dataCtg, setdataCtg] = useState([]);
   const [modal, setModal] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
-  const [dataEditCtg, setDataEditCtg] = useState("");
 
   const { isLoggedIn } = useAuth();
 
   const handleModalAdd = () => {
     setModal(true);
   };
-
-  const handleModalEdit = (params) => {
-    setModalEdit(true);
-    setDataEditCtg(params);
-  };
-
-  //   console.log(dataEditCtg);
 
   const succesAddCtg = () => {
     setModal(false);
