@@ -6,9 +6,11 @@ import { FaPlus } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+import { useAuth } from "../utils/AuthContext";
 
 const CreateBook = () => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
   const [image, setImage] = useState("");
   const [listCtg, setListCtg] = useState([]);
   const [category, setCategory] = useState(0);
@@ -63,6 +65,9 @@ const CreateBook = () => {
 
   useEffect(() => {
     getCategory();
+    if (!isLoggedIn) {
+      navigate("/");
+    }
   }, []);
 
   return (
@@ -74,7 +79,7 @@ const CreateBook = () => {
         </h1>
         <section className=" w-full flex flex-col gap-4">
           <div className="flex gap-5">
-            <div className=" flex h-full border px-9 py-7 rounded-lg">
+            <div className=" flex h-full border-2 px-9 py-7 rounded-lg">
               <div className=" w-[200px] h-[320px] border rounded-lg flex justify-center items-center overflow-hidden">
                 {image === "" ? (
                   <label htmlFor="image" className="cursor-pointer">

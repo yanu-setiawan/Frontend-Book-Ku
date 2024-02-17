@@ -7,11 +7,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getCategories, getDetailBook, updateBook } from "../configs/https";
 import { FaPlus } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { useAuth } from "../utils/AuthContext";
 
 const EditBook = () => {
   const navigate = useNavigate();
   const params = useParams();
-
+  const { isLoggedIn, onLogout } = useAuth();
   const [image, setImage] = useState("");
   const [listCtg, setListCtg] = useState([]);
   const [category, setCategory] = useState(0);
@@ -74,7 +75,7 @@ const EditBook = () => {
     }
   };
 
-  console.log(book);
+  //   console.log(book);
 
   const onChangeFile = (event) => {
     setImage(event.target.files[0]);
@@ -83,6 +84,9 @@ const EditBook = () => {
   useEffect(() => {
     getCategory();
     getBook();
+    if (!isLoggedIn) {
+      navigate("/");
+    }
   }, []);
 
   useEffect(() => {
@@ -104,7 +108,7 @@ const EditBook = () => {
         ) : (
           <section className=" w-full flex flex-col gap-4">
             <div className="flex gap-5">
-              <div className=" flex h-full border px-9 py-7 rounded-lg">
+              <div className=" flex h-full border-2 px-9 py-7 rounded-lg">
                 <div className=" w-[200px] h-[320px] border rounded-lg flex justify-center items-center overflow-hidden">
                   <label
                     htmlFor="image"
